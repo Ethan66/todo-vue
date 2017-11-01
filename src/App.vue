@@ -96,7 +96,11 @@ export default {
       let dataString = JSON.stringify(this.todoList)
         var AVTodos = AV.Object.extend('AllTodos');
       var avTodos = new AVTodos();
+      var acl = new AV.ACL()
+      acl.setReadAccess(AV.User.current(),true)
+      acl.setWriteAccess(AV.User.current(),true)
       avTodos.set('content', dataString);
+      avTodos.setACL(acl)
       avTodos.save().then(function (todo) {
           alert('保存成功');
         }, function (error) {
