@@ -2,10 +2,10 @@
   <div id="app">
     <section id="signInAndSignUp">
       <div>
-        <label><input type="radio" name="type" value="signUp">注册</label>
-        <label><input type="radio" name="type" value="login">登入</label>
+        <label><input type="radio" name="type" v-model='actionType' value="signUp">注册</label>
+        <label><input type="radio" name="type" v-model='actionType' value="login">登入</label>
       </div>
-      <div class="signUp">
+      <div class="signUp" v-show="actionType=='signUp'">
         <form>
           <div class="formRow">
             用户名<input type="text">
@@ -18,7 +18,7 @@
           </div>
         </form>
       </div>
-      <div class="login">
+      <div class="login" v-show="actionType=='login'">
         <form>
           <div class="formRow">
             用户名<input type="text">
@@ -69,8 +69,9 @@ export default {
   },
   data(){
       return {
-          newTodo:'',
-          todoList:[]
+        newTodo:'',
+        todoList:[],
+        actionType:'signUp'
       }
   },
   methods:{
