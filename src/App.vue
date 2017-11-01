@@ -69,14 +69,14 @@ export default {
 
   },
   created(){
-    window.onbeforeunload = ()=>{
+    /*window.onbeforeunload = ()=>{
       let dataString = JSON.stringify(this.todoList)
       window.localStorage.setItem('myTodos', dataString)
     }
 
     let oldDataString = window.localStorage.getItem('myTodos')
     let oldData = JSON.parse(oldDataString)
-    this.todoList = oldData || []
+    this.todoList = oldData || []*/
   },
   data(){
       return {
