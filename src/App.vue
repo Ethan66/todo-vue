@@ -70,15 +70,17 @@ export default {
 
   },
   created(){
-    window.onbeforeunload = ()=>{
-      let dataString = JSON.stringify(this.todoList)
-      window.localStorage.setItem('myTodos', dataString)
-    }
 
-    let oldDataString = window.localStorage.getItem('myTodos')
-    let oldData = JSON.parse(oldDataString)
-    this.todoList = oldData || []
     this.currentUser = this.getCurrentUser();
+    if(this.currentUser){
+        var query = new AV.Query('AllTodos');
+        query.find()
+          .then(function (todos) {
+              console.log(todos)
+            }, function(error){
+              console.error(error)
+            })
+      }
   },
   data(){
       return {
