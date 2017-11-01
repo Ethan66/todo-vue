@@ -6,7 +6,7 @@
         <label><input type="radio" name="type" v-model='actionType' value="login">登入</label>
       </div>
       <div class="signUp" v-show="actionType=='signUp'">
-        <form>
+        <form v-on:submit.prevent='signUp'>
           <div class="formRow">
             用户名<input type="text" v-model='formData.username'>
           </div>
@@ -50,6 +50,17 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import AV from 'leancloud-storage'
+
+  var APP_ID = 'QxFzuBWaNf3z0YOWbyTAPM0X-gzGzoHsz';
+  var APP_KEY = 'POPAqK6a4LlgOrIPtjKDBzBc';
+
+  AV.init({
+    appId: APP_ID,
+    appKey: APP_KEY
+  });
+
 
 
 export default {
@@ -87,6 +98,15 @@ export default {
       },
     removeTodo(index){
         this.todoList.splice(index,1)
+    },
+    signUp(){
+      let user = new AV.User();
+      user.setUsername(this.formData.username);
+      user.setPassword(this.formData.password);
+      user.signUp().then(function (loginedUser) {
+        console.log(loginedUser);
+      }, function (error) {
+      });
     }
   }
 }
