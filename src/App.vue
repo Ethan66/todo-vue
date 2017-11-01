@@ -70,14 +70,15 @@ export default {
 
   },
   created(){
-    /*window.onbeforeunload = ()=>{
+    window.onbeforeunload = ()=>{
       let dataString = JSON.stringify(this.todoList)
       window.localStorage.setItem('myTodos', dataString)
     }
 
     let oldDataString = window.localStorage.getItem('myTodos')
     let oldData = JSON.parse(oldDataString)
-    this.todoList = oldData || []*/
+    this.todoList = oldData || []
+    this.currentUser = this.getCurrentUser();
   },
   data(){
       return {
@@ -119,8 +120,13 @@ export default {
       });
     },
     getCurrent(){
-        let {id,createdAt,attributes:{username}}=AV.User.current()
-      return {id, username, createdAt}
+      let current = AV.User.current()
+         if (current) {
+           let {id, createdAt, attributes: {username}} = current
+           return {id, username, createdAt}
+         } else {
+           return null
+           }
     },
     logout(){
       AV.User.logOut()
