@@ -115,9 +115,8 @@ export default {
       avTodos.set('content', dataString);
       avTodos.setACL(acl)
       avTodos.save().then((todo)=>{
-          console.log(todo)
         this.todoList.id = todo.id
-          alert('保存成功');
+          console.log('保存成功');
         }, function (error) {
           alert('保存失败');
         });
@@ -149,6 +148,7 @@ export default {
         this.currentUser=this.getCurrentUser()
       }, (error)=>{
           alert("注册失败")
+        console.log(error)
       });
     },
     login(){
@@ -156,6 +156,7 @@ export default {
         this.currentUser=this.getCurrentUser()
       }, (error)=>{
           alert('登录失败')
+        console.log(error)
       });
     },
     getCurrentUser(){
