@@ -34,6 +34,7 @@
     </section>
 
     <section id="todo" v-if="currentUser">
+      <p><button v-on:click="logout">登出</button></p>
       <div class="newTask">
         <input type="text" v-model='newTodo' v-on:keyup.enter="addTodo">
       </div>
@@ -120,6 +121,11 @@ export default {
     getCurrent(){
         let {id,createdAt,attributes:{username}}=AV.User.current()
       return {id, username, createdAt}
+    },
+    logout(){
+      AV.User.logOut()
+        this.currentUser = null
+        window.location.reload()
     }
   }
 }
