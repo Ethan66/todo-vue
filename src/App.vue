@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <section id="signInAndSignUp">
+    <section id="signInAndSignUp" v-if="!currentUser">
       <div>
         <label><input type="radio" name="type" v-model='actionType' value="signUp">注册</label>
         <label><input type="radio" name="type" v-model='actionType' value="login">登入</label>
@@ -33,7 +33,7 @@
       </div>
     </section>
 
-    <section id="todo">
+    <section id="todo" v-if="currentUser">
       <div class="newTask">
         <input type="text" v-model='newTodo' v-on:keyup.enter="addTodo">
       </div>
@@ -85,7 +85,8 @@ export default {
         actionType:'signUp',
         formData:{
             username:'',password:''
-        }
+        },
+        currentUser:''
       }
   },
   methods:{
@@ -103,16 +104,22 @@ export default {
       let user = new AV.User();
       user.setUsername(this.formData.username);
       user.setPassword(this.formData.password);
-      user.signUp().then(function (loginedUser) {
-        console.log(loginedUser);
-      }, function (error) {
+      user.signUp().then( (loginedUser)=> {
+        this.currentUser=this.getCurrent()
+      }, (error)=>{
+          alert("注册失败")
       });
     },
     login(){
-      AV.User.logIn(this.formData.username, this.formData.password).then(function (loginedUser) {
-        console.log(loginedUser);
-      }, function (error) {
+      AV.User.logIn(this.formData.username, this.formData.password).then( (loginedUser)=>{
+        this.currentUser=this.getCurrent()
+      }, (error)=>{
+          alert('登录失败')
       });
+    },
+    getCurrent(){
+        let {id,createdAt,attributes:{username}}=AV.User.current()
+      return {id, username, createdAt}
     }
   }
 }
