@@ -75,8 +75,11 @@ export default {
     if(this.currentUser){
         var query = new AV.Query('AllTodos');
         query.find()
-          .then(function (todos) {
-              console.log(todos)
+          .then((todos)=>{
+              let avAllTodos = todos[0]
+              let id = avAllTodos.id
+              this.todoList = JSON.parse(avAllTodos.attributes.content)
+              this.todoList.id = id
             }, function(error){
               console.error(error)
             })
@@ -94,7 +97,15 @@ export default {
       }
   },
   methods:{
-    saveTodos: function(){
+    updateTodos(){
+        let dataString = JSON.stringify(this.todoList)
+        let avTodos = AV.Object.createWithoutData('AllTodos', this.todoList.id)
+        avTodos.set('content', dataString)
+        avTodos.save().then(()=>{
+            console.log('更新成功')
+          })
+      },
+    saveTodos(){
       let dataString = JSON.stringify(this.todoList)
         var AVTodos = AV.Object.extend('AllTodos');
       var avTodos = new AVTodos();
@@ -103,23 +114,32 @@ export default {
       acl.setWriteAccess(AV.User.current(),true)
       avTodos.set('content', dataString);
       avTodos.setACL(acl)
-      avTodos.save().then(function (todo) {
+      avTodos.save().then((todo)=>{
+          console.log(todo)
+        this.todoList.id = todo.id
           alert('保存成功');
         }, function (error) {
           alert('保存失败');
         });
     },
+    saveOrUpdateTodos(){
+        if(this.todoList.id){
+            this.updateTodos()
+          }else{
+            this.saveTodos()
+          }
+      },
       addTodo(){
           this.todoList.push({
             title: this.newTodo,
             done: false
           })
         this.newTodo=''
-        this.saveTodos()
+        this.saveOrUpdateTodos()
       },
     removeTodo(index){
         this.todoList.splice(index,1)
-      this.saveTodos()
+      this.saveOrUpdateTodos()
     },
     signUp(){
       let user = new AV.User();
