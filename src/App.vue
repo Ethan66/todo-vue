@@ -19,7 +19,7 @@
         </form>
       </div>
       <div class="login" v-show="actionType=='login'">
-        <form>
+        <form v-on:submit.prevent="login">
           <div class="formRow">
             用户名<input type="text" v-model='formData.username'>
           </div>
@@ -104,6 +104,12 @@ export default {
       user.setUsername(this.formData.username);
       user.setPassword(this.formData.password);
       user.signUp().then(function (loginedUser) {
+        console.log(loginedUser);
+      }, function (error) {
+      });
+    },
+    login(){
+      AV.User.logIn(this.formData.username, this.formData.password).then(function (loginedUser) {
         console.log(loginedUser);
       }, function (error) {
       });
