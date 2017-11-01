@@ -72,18 +72,8 @@ export default {
   created(){
 
     this.currentUser = this.getCurrentUser();
-    if(this.currentUser){
-        var query = new AV.Query('AllTodos');
-        query.find()
-          .then((todos)=>{
-              let avAllTodos = todos[0]
-              let id = avAllTodos.id
-              this.todoList = JSON.parse(avAllTodos.attributes.content)
-              this.todoList.id = id
-            }, function(error){
-              console.error(error)
-            })
-      }
+    this.fetchTodos()
+
   },
   data(){
       return {
@@ -97,6 +87,20 @@ export default {
       }
   },
   methods:{
+      fetchTodos(){
+        if(this.currentUser){
+          var query = new AV.Query('AllTodos');
+          query.find()
+            .then((todos)=>{
+              let avAllTodos = todos[0]
+              let id = avAllTodos.id
+              this.todoList = JSON.parse(avAllTodos.attributes.content)
+              this.todoList.id = id
+            }, function(error){
+              console.error(error)
+            })
+        }
+      },
     updateTodos(){
         let dataString = JSON.stringify(this.todoList)
         let avTodos = AV.Object.createWithoutData('AllTodos', this.todoList.id)
@@ -154,6 +158,7 @@ export default {
     login(){
       AV.User.logIn(this.formData.username, this.formData.password).then( (loginedUser)=>{
         this.currentUser=this.getCurrentUser()
+        this.fetchTodos()
       }, (error)=>{
           alert('登录失败')
         console.log(error)
