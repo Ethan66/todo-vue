@@ -8,10 +8,10 @@
       <div class="signUp" v-show="actionType=='signUp'">
         <form>
           <div class="formRow">
-            用户名<input type="text">
+            用户名<input type="text" v-model='formData.username'>
           </div>
           <div class="formRow">
-            密码<input type="password">
+            密码<input type="password" v-model='formData.password'>
           </div>
           <div class="formActions">
             <input type="submit" value="注册">
@@ -21,10 +21,10 @@
       <div class="login" v-show="actionType=='login'">
         <form>
           <div class="formRow">
-            用户名<input type="text">
+            用户名<input type="text" v-model='formData.username'>
           </div>
           <div class="formRow">
-            密码<input type="password">
+            密码<input type="password" v-model='formData.password'>
           </div>
           <div class="formActions">
             <input type="submit" value="登入">
@@ -71,7 +71,10 @@ export default {
       return {
         newTodo:'',
         todoList:[],
-        actionType:'signUp'
+        actionType:'signUp',
+        formData:{
+            username:'',password:''
+        }
       }
   },
   methods:{
