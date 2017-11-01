@@ -92,37 +92,51 @@ export default {
       }
   },
   methods:{
+    saveTodos: function(){
+      let dataString = JSON.stringify(this.todoList)
+        var AVTodos = AV.Object.extend('AllTodos');
+      var avTodos = new AVTodos();
+      avTodos.set('content', dataString);
+      avTodos.save().then(function (todo) {
+          alert('保存成功');
+        }, function (error) {
+          alert('保存失败');
+        });
+    },
       addTodo(){
           this.todoList.push({
             title: this.newTodo,
             done: false
           })
         this.newTodo=''
+        this.saveTodos()
       },
     removeTodo(index){
         this.todoList.splice(index,1)
+      this.saveTodos()
     },
     signUp(){
       let user = new AV.User();
       user.setUsername(this.formData.username);
       user.setPassword(this.formData.password);
       user.signUp().then( (loginedUser)=> {
-        this.currentUser=this.getCurrent()
+        this.currentUser=this.getCurrentUser()
       }, (error)=>{
           alert("注册失败")
       });
     },
     login(){
       AV.User.logIn(this.formData.username, this.formData.password).then( (loginedUser)=>{
-        this.currentUser=this.getCurrent()
+        this.currentUser=this.getCurrentUser()
       }, (error)=>{
           alert('登录失败')
       });
     },
-    getCurrent(){
+    getCurrentUser(){
       let current = AV.User.current()
          if (current) {
            let {id, createdAt, attributes: {username}} = current
+           console.log({id, username, createdAt})
            return {id, username, createdAt}
          } else {
            return null
